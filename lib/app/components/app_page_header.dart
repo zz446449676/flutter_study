@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:xb2_flutter/app/components/app_logo.dart';
+import 'package:xb2_flutter/app/components/app_page_header_actions_more.dart';
 
 class AppPageHeader extends StatelessWidget implements PreferredSizeWidget {
   const AppPageHeader({Key? key}) : super(key: key);
@@ -9,12 +10,14 @@ class AppPageHeader extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       centerTitle: true,
       leading: IconButton(
-        onPressed: () {},
+        onPressed: () {
+          Scaffold.of(context).openDrawer();
+        },
         icon: const Icon(Icons.menu),
       ),
       title: const AppLogo(size: 28),
-      actions: [
-        IconButton(onPressed: () {}, icon: const Icon(Icons.more_horiz)),
+      actions: const [
+        AppPageHeaderActionsMore(),
       ],
       bottom: const TabBar(
         tabs: [

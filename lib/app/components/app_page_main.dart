@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:xb2_flutter/post/create/post_create.dart';
 import 'package:xb2_flutter/post/index/post_index.dart';
