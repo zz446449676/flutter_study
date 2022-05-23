@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:xb2_flutter/playground/layout/components/playground_layout_item.dart';
+import 'components/playground_layout_item.dart';
 
 class PlaygroundLayout extends StatelessWidget {
   const PlaygroundLayout({Key? key}) : super(key: key);

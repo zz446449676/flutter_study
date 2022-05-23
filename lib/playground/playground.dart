@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:xb2_flutter/playground/input/playground_input.dart';
 import 'package:xb2_flutter/playground/layout/playground_layout.dart';
 
 class Playground extends StatelessWidget {
@@ -6,6 +7,6 @@ class Playground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const PlaygroundLayout();
+    return const PlaygroundInput();
   }
 }
