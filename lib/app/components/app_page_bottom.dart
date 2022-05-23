@@ -11,6 +11,10 @@ class AppPageBottom extends StatelessWidget {
     return BottomNavigationBar(
       currentIndex: currentIndex,
       onTap: onTap,
+      unselectedItemColor: Colors.black,
+      selectedItemColor: Colors.deepPurpleAccent,
+      showSelectedLabels: true,
+      type: BottomNavigationBarType.fixed,
       items: const [
         BottomNavigationBarItem(
           icon: Icon(Icons.explore_outlined),
@@ -23,6 +27,10 @@ class AppPageBottom extends StatelessWidget {
         BottomNavigationBarItem(
           icon: Icon(Icons.account_circle_outlined),
           label: '用户',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.sports_volleyball),
+          label: '练习',
         ),
       ],
     );
