@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:xb2_flutter/playground/routing/playground_routing.dart';
+import 'package:xb2_flutter/playground/http/playground_http.dart';
 
 
 class Playground extends StatelessWidget {
@@ -7,6 +7,6 @@ class Playground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const PlaygroundRouting();
+    return const PlaygroundHttp();
   }
 }
