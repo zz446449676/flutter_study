@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:xb2_flutter/app/app_config.dart';
 import 'package:xb2_flutter/user/user.dart';
 
 class PlaygroundHttp extends StatefulWidget {
@@ -18,7 +19,7 @@ class _PlaygroundHttpState extends State<PlaygroundHttp> {
   String? currentUserToken;
 
   getUser() async {
-    final uri = Uri.parse('https://nid-node.ninghao.co/users/78');
+    final uri = Uri.parse('${AppConfig.apiBaseUrl}/users/78');
     final response = await http.get(uri);
 
     print('状态码 : ${response.statusCode}');

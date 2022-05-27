@@ -29,7 +29,7 @@ class _AppHomeState extends State<AppHome> {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        backgroundColor: Colors.amber,
+        // backgroundColor: Colors.amber,
         appBar: showAppBar ? const AppPageHeader() : null,
         body: AppPageMain(currentIndex: currentAppBottomNavigationBarItem),
         bottomNavigationBar: AppPageBottom(
