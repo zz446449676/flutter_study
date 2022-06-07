@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/src/provider.dart';
+import 'package:xb2_flutter/post/index/components/post_list_item.dart';
 import 'package:xb2_flutter/post/index/post_index_model.dart';
 
 class PostList extends StatefulWidget {
@@ -29,11 +30,7 @@ class _PostListState extends State<PostList> {
     final list = ListView.builder(
       itemCount: posts.length,
       itemBuilder: (context, index) {
-        return Text(
-          // 最后的！是说明这个参数不可能为空
-          posts[index].content!,
-          style: Theme.of(context).textTheme.headline6,
-        );
+        return PostListItem(item: posts[index]);
       },
     );
 

@@ -53,7 +53,7 @@ class PostUser{
 }
 
 @JsonSerializable(explicitToJson: true)
-class PostFile{
+class  PostFile{
   int? id;
   int? width;
   int? height;
