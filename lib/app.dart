@@ -8,6 +8,7 @@ import 'package:xb2_flutter/app/themes/app_theme.dart';
 import 'package:xb2_flutter/auth/auth_model.dart';
 import 'package:xb2_flutter/playground/routing/components/about.dart';
 import 'package:xb2_flutter/post/show/post_show.dart';
+import 'package:xb2_flutter/post/show/post_show_model.dart';
 
 class App extends StatefulWidget {
   const App({Key? key}) : super(key: key);
@@ -27,6 +28,8 @@ class _AppState extends State<App> {
         // => 为 return 的缩写， ChangeNotifierProvider 返回appModel
         ChangeNotifierProvider<AuthModel>(create: (context) => AuthModel()),
         ChangeNotifierProvider<AppModel>(create: (context) => appModel),
+        ChangeNotifierProvider<PostShowModel>(
+            create: (context) => PostShowModel()),
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
@@ -61,6 +64,7 @@ class _AppState extends State<App> {
         //   routerDelegate: AppRouterDelegate(appModel),
         //   routeInformationParser: AppRouteInformationParser(),
         // ),
+
         routerDelegate: AppRouterDelegate(appModel),
         routeInformationParser: AppRouteInformationParser(),
       ),

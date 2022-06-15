@@ -2,7 +2,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:xb2_flutter/app/router/app_route_configuration.dart';
 
-// 路由信息解析器，操作系统或者平台的路由器会将设备的路由信息交给路由信息解析器
+// 路由信息解析器，操作系统或者平台（web）的路由器会将设备的路由信息交给路由信息解析器
 // 路由信息解析器解析出来后就变成我们自己定义好的路由配置信息AppRouteConfiguration
 // 最后把路由配置信息交给路由代表RouteDelegate去构建出Navigator
 class AppRouteInformationParser extends RouteInformationParser<AppRouteConfiguration> {
@@ -12,8 +12,12 @@ class AppRouteInformationParser extends RouteInformationParser<AppRouteConfigura
   @override
   Future<AppRouteConfiguration> parseRouteInformation(RouteInformation routeInformation) async{
     print('解析路由信息：${routeInformation.location}');
+    final uri = Uri.parse(routeInformation.location ?? '');
     if (routeInformation.location == '/about') {
       return AppRouteConfiguration.about();
+    }
+    if (uri.pathSegments.length == 2 && uri.pathSegments[0] == 'posts') {
+      return AppRouteConfiguration.postShow(uri.pathSegments[1]);
     }
     return AppRouteConfiguration.home();
   }
@@ -26,6 +30,9 @@ class AppRouteInformationParser extends RouteInformationParser<AppRouteConfigura
     }
     else if (configuration.isAboutPage) {
       return RouteInformation(location: '/about');
+    }
+    else if (configuration.isPostShow) {
+      return RouteInformation(location: '/posts/${configuration.resourceId}');
     }
   }
 }
