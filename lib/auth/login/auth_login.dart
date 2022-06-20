@@ -6,8 +6,14 @@ class AuthLogin extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: AuthLoginForm(),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('用户登录'),
+      ),
+      body: const AuthLoginForm(),
+
+      // 避免底部弹出软键盘导致页面结构发生改变，从而造成页面显示溢出的错误BOTTOM OVERFLOWED BY xx pixels
+      resizeToAvoidBottomInset: false,
     );
   }
 }

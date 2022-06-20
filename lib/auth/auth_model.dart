@@ -1,22 +1,42 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
+import 'package:xb2_flutter/app/app_config.dart';
+import 'package:xb2_flutter/app/exceptions/http_exception.dart';
+import 'package:xb2_flutter/auth/auth.dart';
+import 'package:http/http.dart' as http;
 
 // 注意：要使用provider让不同的部件提供数据，或者共享数据的前提是，这几个小部件必须在相同的父类中才行
 class AuthModel extends ChangeNotifier{
-  bool isLoggedIn = false;
   String name = '';
+  String token = '';
+  String userId = '';
+  bool get isLoggedIn => token.isNotEmpty;
 
-  login() {
-    isLoggedIn = true;
-    name = '章周';
-    print('请求登录！');
-    // 加入监听后，只要Model的属性发生改变，那么监听了这个Model以后的小部件都会被重建
-    notifyListeners();
+  Future<Auth> login(LoginData data) async {
+    final uri = Uri.parse('${AppConfig.apiBaseUrl}/login');
+    final response = await http.post(uri, body: data.toJson());
+    final responseBody = jsonDecode(response.body);
+
+    if (response.statusCode == 200) {
+      final auth = Auth.fromJson(responseBody);
+      userId = auth.id.toString();
+      name = auth.name;
+      token = auth.token;
+
+      // 加入监听后，只要Model的属性发生改变，那么监听了这个Model以后的小部件都会被重建
+      notifyListeners();
+
+      return auth;
+    } else {
+      throw HttpException(responseBody['message'] ?? '网络请求出了点问题');
+    }
   }
 
   logout() {
-    isLoggedIn = false;
+    userId = '';
     name = '';
-    print('退出登录！');
+    token = '';
     notifyListeners();
   }
 }
