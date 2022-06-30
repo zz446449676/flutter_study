@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:xb2_flutter/app/app_config.dart';
 import 'package:xb2_flutter/app/exceptions/http_exception.dart';
 import 'package:xb2_flutter/auth/auth.dart';
@@ -13,6 +14,24 @@ class AuthModel extends ChangeNotifier{
   String userId = '';
   bool get isLoggedIn => token.isNotEmpty;
 
+  // 将Auth信息存储至手机本地Sp文件中
+  storeAuth(Auth auth) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString('auth', jsonEncode(auth));
+  }
+
+  removeAuth() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove('auth');
+  }
+
+  setAuth(Auth auth) {
+    userId = '${auth.id}';
+    name = auth.name;
+    token = auth.token;
+    notifyListeners();
+  }
+
   Future<Auth> login(LoginData data) async {
     final uri = Uri.parse('${AppConfig.apiBaseUrl}/login');
     final response = await http.post(uri, body: data.toJson());
@@ -24,6 +43,7 @@ class AuthModel extends ChangeNotifier{
       name = auth.name;
       token = auth.token;
 
+      storeAuth(auth);
       // 加入监听后，只要Model的属性发生改变，那么监听了这个Model以后的小部件都会被重建
       notifyListeners();
 
@@ -37,6 +57,7 @@ class AuthModel extends ChangeNotifier{
     userId = '';
     name = '';
     token = '';
+    removeAuth();
     notifyListeners();
   }
 }

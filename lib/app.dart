@@ -1,14 +1,16 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:xb2_flutter/app/app_provider.dart';
+import 'package:xb2_flutter/auth/auth.dart';
 import 'package:xb2_flutter/app/app_model.dart';
-import 'package:xb2_flutter/app/components/app_home.dart';
 import 'package:xb2_flutter/app/router/app_route_information_parser.dart';
 import 'package:xb2_flutter/app/router/app_router_delegate.dart';
 import 'package:xb2_flutter/app/themes/app_theme.dart';
 import 'package:xb2_flutter/auth/auth_model.dart';
-import 'package:xb2_flutter/playground/routing/components/about.dart';
-import 'package:xb2_flutter/post/show/post_show.dart';
-import 'package:xb2_flutter/post/show/post_show_model.dart';
+import 'package:xb2_flutter/post/post_provider.dart';
 
 class App extends StatefulWidget {
   const App({Key? key}) : super(key: key);
@@ -20,16 +22,55 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   // 新建一个 AppModel 实例
   final AppModel appModel = AppModel();
+  final AuthModel authModel = AuthModel();
+
+  bool initializing = true;
+
+  initialize() async {
+    final prefs = await SharedPreferences.getInstance();
+    final hasAuth = prefs.containsKey('auth');
+
+    if (hasAuth) {
+      final auth = Auth.fromJson(
+        jsonDecode(prefs.getString('auth')!),
+      );
+      authModel.setAuth(auth);
+    }
+
+    setState(() {
+      initializing = false;
+    });
+  }
+
+
+  @override
+  void initState() {
+    super.initState();
+    initialize();
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (initializing) {
+      return const MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: Scaffold(
+          body: Center(
+            child: Text('初始化...'),
+          ),
+        ),
+      );
+    }
+
     return MultiProvider(
       providers: [
         // => 为 return 的缩写， ChangeNotifierProvider 返回appModel
-        ChangeNotifierProvider<AuthModel>(create: (context) => AuthModel()),
-        ChangeNotifierProvider<AppModel>(create: (context) => appModel),
-        ChangeNotifierProvider<PostShowModel>(
-            create: (context) => PostShowModel()),
+        // 通过value方法向Provider中初始构造一个authModel实例
+        ChangeNotifierProvider<AuthModel>.value(value: authModel,),
+        ChangeNotifierProvider<AppModel>.value(value: appModel,),
+        // ... ，称为spread展开操作符，它允许您将集合、集合等拆分为其项
+        ...appProviders,
+        ...postProviders,
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,

@@ -5,7 +5,6 @@ import 'package:xb2_flutter/post/index/post_index_model.dart';
 
 class PostList extends StatefulWidget {
   const PostList({Key? key}) : super(key: key);
-
   @override
   State<PostList> createState() => _PostListState();
 }
