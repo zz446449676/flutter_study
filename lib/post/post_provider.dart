@@ -1,6 +1,5 @@
 import 'package:provider/provider.dart';
 import 'package:xb2_flutter/app/app_service.dart';
-import 'package:xb2_flutter/post/index/post_index.dart';
 import 'package:xb2_flutter/post/show/post_show_model.dart';
 import 'index/post_index_model.dart';
 

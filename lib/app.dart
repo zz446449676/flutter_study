@@ -10,6 +10,7 @@ import 'package:xb2_flutter/app/router/app_route_information_parser.dart';
 import 'package:xb2_flutter/app/router/app_router_delegate.dart';
 import 'package:xb2_flutter/app/themes/app_theme.dart';
 import 'package:xb2_flutter/auth/auth_model.dart';
+import 'package:xb2_flutter/like/like_provider.dart';
 import 'package:xb2_flutter/post/post_provider.dart';
 
 class App extends StatefulWidget {
@@ -71,6 +72,7 @@ class _AppState extends State<App> {
         // ... ，称为spread展开操作符，它允许您将集合、集合等拆分为其项
         ...appProviders,
         ...postProviders,
+        ...likeProviders,
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,

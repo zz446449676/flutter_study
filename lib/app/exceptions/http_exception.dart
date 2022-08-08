@@ -1,7 +1,9 @@
 class HttpException implements Exception {
-  String message;
+  late String message;
 
-  HttpException(this.message);
+  HttpException(String? message) {
+    this.message = message ?? '网络请求出了点问题！';
+  }
 
   @override
   String toString() {
