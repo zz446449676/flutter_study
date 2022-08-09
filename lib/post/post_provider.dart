@@ -11,7 +11,7 @@ create: (context) => PostShowModel()
 final postIndexProvider = ChangeNotifierProxyProvider<AppService, PostIndexModel >(
   create: (context) => PostIndexModel(appService: context.read<AppService>()),
   update: (context, appService, postIndexModel) {
-    return PostIndexModel(appService: appService, posts: postIndexModel?.posts);
+    return PostIndexModel(appService: appService, posts: postIndexModel?.posts, layout: postIndexModel?.layout);
   },
 );
 final postProviders = [

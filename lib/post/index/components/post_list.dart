@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/src/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:xb2_flutter/post/index/components/post_list_item.dart';
 import 'package:xb2_flutter/post/index/post_index_model.dart';
 
 class PostList extends StatefulWidget {
-  const PostList({Key? key}) : super(key: key);
+  const PostList({Key? key, this.sort}) : super(key: key);
+
+  final String? sort;
   @override
   State<PostList> createState() => _PostListState();
 }
@@ -26,18 +29,51 @@ class _PostListState extends State<PostList> {
     );
 
     // 当有内容时，使用ListView构建列表视图将内容显示出来
-    final list = ListView.builder(
+    final stackList = ListView.builder(
       itemCount: posts.length,
       itemBuilder: (context, index) {
         return PostListItem(item: posts[index]);
       },
     );
 
+    final gridList = GridView.builder(
+        itemCount: posts.length,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 16,
+          mainAxisSpacing: 16,
+        ),
+        itemBuilder: (context, index) {
+          return PostListItem(
+              item: posts[index],
+              layout: PostListLayout.grid,
+          );
+        },
+    );
+
     model.posts?.forEach((element) {
       print(element.toJson());
     });
 
-    return posts.length == 0 ? noContent : list;
+    // 声名一个Widget，默认为stackList
+    Widget postList = stackList;
+
+    if (model.layout == PostListLayout.grid) {
+      postList = gridList;
+    }
+
+    return posts.length == 0 ? noContent : postList;
+  }
+
+  // 从SP中读取布局并且设置布局
+  restoreLayout() async {
+    final prefs = await SharedPreferences.getInstance();
+    final data = prefs.getString('postListLayout');
+
+    if (data != null) {
+      PostListLayout layout = PostListLayout.values.firstWhere((element) => element.toString() == data);
+      context.read<PostIndexModel>().setLayout(layout);
+    }
   }
 
   @override
@@ -46,7 +82,10 @@ class _PostListState extends State<PostList> {
 
     // 创建一个微任务
     Future.microtask(() {
-      context.read<PostIndexModel>().getPosts();
+      context.read<PostIndexModel>().getPosts(sort: widget.sort ?? 'latest');
     });
+
+    // 恢复布局
+    restoreLayout();
   }
 }

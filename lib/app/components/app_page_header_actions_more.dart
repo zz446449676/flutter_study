@@ -1,25 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:xb2_flutter/post/index/post_index_model.dart';
 
 class AppPageHeaderActionsMore extends StatelessWidget {
   const AppPageHeaderActionsMore({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final postIndexModel = context.watch<PostIndexModel>();
+
     return PopupMenuButton(
         itemBuilder: (context) => [
-          const PopupMenuItem(
+          PopupMenuItem(
             child: Icon(
               Icons.view_agenda_outlined,
-              color: Colors.black54,
+              color: postIndexModel.layout == PostListLayout.stack ?
+              Theme.of(context).primaryColor : Colors.black,
             ),
-            value: 'stack',
+            value: PostListLayout.stack,
           ),
-          const PopupMenuItem(
+          PopupMenuItem(
             child: Icon(
               Icons.dashboard_outlined,
-              color: Colors.black54,
+              color: postIndexModel.layout == PostListLayout.grid ?
+              Theme.of(context).primaryColor : Colors.black,
             ),
-            value: 'grid',
+            value: PostListLayout.grid,
           ),
         ],
       icon: const Icon(Icons.more_horiz),
@@ -27,7 +33,8 @@ class AppPageHeaderActionsMore extends StatelessWidget {
       onCanceled: () {
           print('popupMenuButton: onCanceled');
       },
-      onSelected: (value) {
+      onSelected: (PostListLayout value) {
+        postIndexModel.storeLayout(value);
         print('popupMenuButton: onSelected $value');
       },
     );

@@ -11,7 +11,7 @@ class PostMedia extends StatelessWidget {
     final fileId = post.file?.id;
     final imageUrl = '${AppConfig.apiBaseUrl}/files/$fileId/serve?size=medium';
     return Container(
-      child: Image.network(imageUrl),
+      child: Image.network(imageUrl, fit: BoxFit.cover,),
     );
   }
 }
