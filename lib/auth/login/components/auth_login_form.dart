@@ -29,6 +29,7 @@ class _AuthLoginFormState extends State<AuthLoginForm> {
     // listen 参数如果为true，则开启监听，当数据发生改变时重构小部件。
     final authModel = Provider.of<AuthModel>(context, listen: true);
     final appModel = context.read<AppModel>();
+    final TextEditingController controller = TextEditingController();
 
     // 标题
     final header = const AppHeaderText(data: '用户登录');
@@ -38,7 +39,7 @@ class _AuthLoginFormState extends State<AuthLoginForm> {
       labelText: '用户名',
       onChanged: (value) {
         name =value;
-        },
+        }, controller: controller,
     );
 
     // 密码

@@ -1,12 +1,5 @@
-class HttpException implements Exception {
-  late String message;
+import 'app_exception.dart';
 
-  HttpException(String? message) {
-    this.message = message ?? '网络请求出了点问题！';
-  }
-
-  @override
-  String toString() {
-    return 'HttpException: $message';
-  }
+class HttpException extends AppException {
+  HttpException([String message = '网络请求出了点问题！']);
 }
