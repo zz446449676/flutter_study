@@ -5,6 +5,7 @@ import 'package:xb2_flutter/app/components/app_button.dart';
 import 'package:xb2_flutter/app/components/app_text_field.dart';
 import 'package:xb2_flutter/app/exceptions/app_exception.dart';
 import 'package:xb2_flutter/app/exceptions/validate_exception.dart';
+import 'package:xb2_flutter/post/create/components/post_create_media.dart';
 import 'package:xb2_flutter/post/create/post_create_model.dart';
 
 class PostCreateForm extends StatefulWidget {
@@ -25,9 +26,33 @@ class _PostCreateFormState extends State<PostCreateForm> {
   final titleFieldController = TextEditingController();
   final contentFieldController = TextEditingController();
 
+
+  @override
+  void initState() {
+    super.initState();
+
+    // 恢复用户填写了但未上传的内容
+    final title = context.read<PostCreateModel>().title;
+    final content = context.read<PostCreateModel>().content;
+
+    if (title != null) {
+      titleFieldController.text = title;
+    }
+    if (content != null) {
+      contentFieldController.text = content;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final postCreateModel = context.watch<PostCreateModel>();
+
+    // 选择文件后设置标题
+    if (postCreateModel.selectedFile != null && postCreateModel.title == null) {
+      final title = postCreateModel.selectedFile!.name.split('.')[0];
+      titleFieldController.text = title;
+      postCreateModel.setTitle(title);
+    }
 
     // 标题字段
     final titleField = AppTextField(
@@ -78,6 +103,8 @@ class _PostCreateFormState extends State<PostCreateForm> {
         postCreateModel.setLoading(true);
         final postId = await postCreateModel.createPost();
         print('zhang postId : $postId');
+        await postCreateModel.createFile(postId: postId);
+        
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('内容发布成功')));
         reset();
       } on AppException catch (e) {
@@ -99,6 +126,7 @@ class _PostCreateFormState extends State<PostCreateForm> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          PostCreateMedia(),
           titleField,
           contentField,
           submitButton,

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:xb2_flutter/post/create/post_create_model.dart';
 
 import 'app_page_aside.dart';
 import 'app_page_bottom.dart';
 import 'app_page_header.dart';
 import 'app_page_main.dart';
+
+import 'package:provider/provider.dart';
 
 class AppHome extends StatefulWidget {
   const AppHome({Key? key}) : super(key: key);
@@ -18,7 +21,40 @@ class _AppHomeState extends State<AppHome> {
   // 是否展示AppBar
   bool showAppBar = false;
   //点击底部导航栏事件处理
-  void onTapAppBottomNavigationBarItem(int index) {
+  void onTapAppBottomNavigationBarItem(int index) async {
+    final postCreateModel = context.read<PostCreateModel>();
+
+    final retainDataAlertDialog = AlertDialog(
+      title: const Text('是否保留未发布的内容？'),
+      actions: [
+        TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(false);
+            },
+            child: const Text('否'),
+        ),
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop(true);
+          },
+          child: const Text('是'),
+        ),
+      ],
+    );
+
+    if (currentAppBottomNavigationBarItem == 1 && postCreateModel.hasData()) {
+      final retainDataResult = await showDialog(
+          context: context,
+          builder: (context) => retainDataAlertDialog,
+      );
+
+      if (retainDataResult == null) { // 用户没有去做选择
+        return;
+      }
+      else if (!retainDataResult) { // 用户点击了否
+        postCreateModel.reset();
+      }
+    }
     setState(() {
       currentAppBottomNavigationBarItem = index;
       showAppBar = currentAppBottomNavigationBarItem == 0;
