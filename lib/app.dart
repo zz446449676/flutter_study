@@ -53,9 +53,11 @@ class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     if (initializing) {
-      return const MaterialApp(
+      return MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: Scaffold(
+        theme: AppTheme.light,
+        darkTheme: AppTheme.dark,
+        home: const Scaffold(
           body: Center(
             child: Text('初始化...'),
           ),
